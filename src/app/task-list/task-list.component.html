@@ -1,0 +1,49 @@
+<div class="container">
+    <h1>To-Do App</h1>
+    <hr>
+    <button class="btn btn-primary" (click)="toggleForm()">
+        {{ showForm ? 'Hide Form' : 'New Task' }}
+    </button>
+    <div *ngIf="showForm">
+    <form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+    <div class="form-group" >
+      <label for="task">New Task</label>
+      <input type="text" class="form-control" id="task" placeholder="Enter New Task" ngModel name="task" required>
+      <small *ngIf="taskForm.invalid && taskForm.dirty" id="errorMessage" class="form-text text-danger">Required Field...</small>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" placeholder="Enter Task Description" ngModel name="description"></textarea>
+
+    </div>
+    <button [disabled]="taskForm.invalid" id="submitbtn" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <hr>
+    </div>
+    
+    <div *ngIf="showList">
+        <div class="form-group">
+            <input type="text" class="form-control" id="search" placeholder="Search Tasks" [(ngModel)]="searchTerm" style="margin: 10px auto; padding: 10px; width: 70%;">
+        </div>
+    <table class="table">
+        <thead>
+          <tr>   
+            <th scope="col">Task</th>
+            <th scope="col">Completed</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of filteredTasks(); index as i">
+            <td>{{t.taskName}}</td>
+            <td><input (change)="onCheck(i)" [checked]="t.isCompleted" id="myCheckBox" type="checkbox"></td>
+            <td><button class="btn btn-danger btn-sm" (click)="onDelete(i)">Delete</button></td>
+            <td><button class="btn btn-info btn-sm" (click)="showDescription(i)">Show Description</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <app-task-details [task]="selectedTask"></app-task-details>
+    </div>
+    
+</div>
